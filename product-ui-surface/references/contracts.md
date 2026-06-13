@@ -9,7 +9,6 @@ For one screen, the surface contract may be inline. When artifacts are persisted
 - `ui-surface/page-inventory.md`
 - `ui-surface/design-system-contract.md`
 - `ui-surface/surface-language-contract.md`
-- `ui-surface/forbidden-terms.txt`
 - `ui-surface/verification-report.md`
 
 ## Page Inventory
@@ -78,29 +77,26 @@ avoid:
 ```markdown
 # Surface Language Contract
 
-allowed_ui_terms:
+surface_language:
 - [real product nouns]
 - [real actions]
 - [real statuses]
 
-forbidden_brief_terms:
-- 帮助用户
-- 提升效率
-- 可控
-- 低干扰
-- agentic workflow
-- 这个界面旨在
-- 管理能力
+brief_only_language:
+- language that explains why the product exists
+- implementation or orchestration language not visible to users
+- strategy, pitch, or PRD phrases
+- abstract qualities that must become concrete UI objects/actions/states
 
 brief_to_ui_translation:
 - brief_phrase: 帮助用户高效管理能力
-  forbidden_in_ui: true
+  why_it_stays_out_of_ui: explains product intent instead of naming an on-screen object, action, or state
   use_instead:
   - object: 能力
   - action: 新建能力 / 编辑能力 / 停用能力
   - state: 草稿 / 已发布 / 已停用
 
-copy_rules:
+visible_language_guidance:
 - Titles name objects or places.
 - Buttons name actions.
 - Status text names current state.
@@ -112,22 +108,6 @@ tone:
 - product surface, not PRD
 - concise, concrete, no tutorial voice
 ```
-
-## Forbidden Terms File
-
-Write `ui-surface/forbidden-terms.txt` with one forbidden visible-UI term per line, derived from `surface-language-contract.md`.
-
-```text
-帮助用户
-提升效率
-可控
-低干扰
-agentic workflow
-这个界面旨在
-管理能力
-```
-
-The audit script can also read `forbidden_brief_terms` directly with `--contract ui-surface/surface-language-contract.md`.
 
 ## Verification Report
 
@@ -162,10 +142,13 @@ interaction_checks:
   result:
   evidence:
 
-visible_text_audit:
-- command:
-- result:
-- findings:
+visible_text_review:
+- screen_region:
+  visible_text:
+  contract_reference:
+  verdict:
+  reasoning:
+  issue:
 
 remaining_risks:
 - ...
@@ -179,6 +162,6 @@ Before giving a worker a slice, remove or summarize:
 - internal design rationale
 - feature pitch language
 - implementation architecture not needed for the slice
-- phrases listed in `forbidden_brief_terms`
+- brief-only language described in `surface-language-contract.md`
 
 If a worker needs domain context, translate it into object/action/state language.

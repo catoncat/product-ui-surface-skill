@@ -31,8 +31,7 @@ For any meaningful UI creation, redesign, or refactor, create a compact UI surfa
 
 - `page-inventory.md`: routes, screens, dialogs, empty/error/loading states, critical flows.
 - `design-system-contract.md`: layout, density, spacing, typography, components, interaction patterns, responsive rules.
-- `surface-language-contract.md`: allowed UI terms, forbidden brief terms, visible text constraints.
-- `forbidden-terms.txt`: one forbidden visible-UI term per line, derived from `surface-language-contract.md`, for mechanical scans.
+- `surface-language-contract.md`: product surface vocabulary, brief-only language, and brief-to-surface translation notes.
 - `verification-report.md`: screenshots reviewed, designer pass, user pass, regressions, remaining risks.
 
 For whole-product work, let the conductor own `ui-surface/workflow-state.md`.
@@ -44,7 +43,7 @@ For whole-product work, let the conductor own `ui-surface/workflow-state.md`.
 3. Slice the work by repeated screen pattern: app shell, navigation, list pages, detail pages, forms, settings, states, then sweep.
 4. Build or improve toward the contract. Prefer existing design-system primitives and shared components over one-off styling.
 5. Verify rendered UI with screenshots. Prefer Codex In-App Browser for local targets (`localhost`, `127.0.0.1`, `file://`) and no-login pages.
-6. Run visible text leakage checks. Use `scripts/audit_visible_text.py` on extracted visible text or UI copy files.
+6. Review visible text against `surface-language-contract.md`. Read it in context and judge whether it sounds like product UI or leaked brief language.
 7. Close each slice only after designer pass, user pass, and focused functional checks are recorded.
 
 Read `references/workflow.md` for multi-page orchestration and role boundaries. Read `references/verification.md` before declaring visual work complete.
@@ -63,7 +62,7 @@ Report these as evidence, not taste. Cite screenshot path or browser target, vie
 - Do not change backend APIs, data models, auth, persistence, pricing, or business rules unless the user explicitly includes them.
 - Do not turn operational tools into marketing pages. Admin/SaaS/productivity tools should stay dense, scannable, and task-focused.
 - Do not introduce a new component system when the repo already has one unless the existing system cannot support the contract.
-- Do not let raw prompt words such as `帮助用户`, `提升效率`, `可控`, `低干扰`, `agentic workflow`, or `这个界面旨在` appear in visible UI unless they are true product terminology.
+- Do not reuse raw prompt vocabulary in visible UI just because it appeared in the brief. Translate intent into product objects, actions, states, and user decisions.
 - Do not call the work complete from code inspection alone; rendered screenshot verification is required when a local/browser target is available.
 
 ## Resources
@@ -72,4 +71,3 @@ Report these as evidence, not taste. Cite screenshot path or browser target, vie
 - `references/contracts.md`: artifact templates and worker prompt shape.
 - `references/verification.md`: visual, interaction, screenshot, and text-leak verification checklist.
 - `references/examples.md`: short greenfield, conductor, worker, and verifier examples.
-- `scripts/audit_visible_text.py`: deterministic scan for brief leakage and explanatory UI phrases.

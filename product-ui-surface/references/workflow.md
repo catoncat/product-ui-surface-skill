@@ -56,7 +56,7 @@ Use context isolation to reduce brief leakage.
 - Required behavior to preserve.
 - Verification commands and browser target.
 
-The builder should not receive long raw strategy text, product-market framing, or phrases that should be forbidden in UI.
+The builder should not receive long raw strategy text, product-market framing, or language that belongs only in the brief.
 
 ### Verifier should see
 
@@ -92,7 +92,7 @@ Preserve:
 
 Do not:
 - add marketing copy
-- expose brief/internal terms
+- surface raw brief or internal language
 - make accessibility the only optimization lens
 - change backend contracts
 
@@ -100,7 +100,7 @@ Verification:
 - run focused tests/build checks
 - verify rendered page in Codex In-App Browser when target is local
 - record designer pass and user pass evidence
-- run visible text audit with project forbidden terms
+- review visible text against the surface-language contract
 ```
 
 ## Controller Closeout
@@ -109,7 +109,7 @@ Before moving to the next wave, reconcile:
 
 - changed files and ownership
 - screenshots or browser observations
-- visible text audit result
+- visible text review findings
 - known regressions
 - follow-up fixes
 

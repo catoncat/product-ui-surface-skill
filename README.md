@@ -2,7 +2,7 @@
 
 Codex skill for creating, redesigning, and refactoring product UI as a real product surface.
 
-It is not a microcopy-only skill and not an accessibility-only checklist. It guides agents to work through UI surface contracts, component consistency, interaction quality, rendered screenshot verification, and visible text leakage checks.
+It is not a microcopy-only skill and not an accessibility-only checklist. It guides agents to work through UI surface contracts, component consistency, interaction quality, rendered screenshot verification, and agent-native visible language review.
 
 ## Install
 
@@ -36,11 +36,3 @@ npx skills add catoncat/codex-conductor -g -a codex -y
 ```
 
 `product-ui-surface` is the UI surface skill. `codex-conductor` is the orchestration skill that coordinates controller, builder, and verifier sessions for large scopes.
-
-## Audit Script
-
-```bash
-python3 product-ui-surface/scripts/audit_visible_text.py visible-text.txt --contract ui-surface/surface-language-contract.md
-```
-
-Use `--help` for allowlists, excludes, JSON output, and project-specific terms.

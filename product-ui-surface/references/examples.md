@@ -18,7 +18,7 @@ object/action/state:
 - actions: 启用 / 停用 / 查看详情
 - states: 已启用 / 已停用 / 不可用
 
-forbidden_brief_terms:
+brief_only_language:
 - helps developers
 - efficiently manage
 - agent capabilities
@@ -28,7 +28,7 @@ forbidden_brief_terms:
 
 brief_to_ui_translation:
 - brief_phrase: efficiently manage agent capabilities
-  forbidden_in_ui: true
+  why_it_stays_out_of_ui: describes the product pitch instead of the screen
   use_instead:
   - object: Skill
   - action: 启用 / 停用
@@ -77,14 +77,14 @@ Preserve:
 - enable/disable flow
 
 Do not:
-- expose brief terms
+- surface raw brief language
 - add marketing copy
 - make accessibility the only optimization lens
 
 Verification:
 - run focused tests/build
 - inspect with Codex In-App Browser
-- run visible text audit
+- review visible text against the surface-language contract
 ```
 
 ## Verifier Report
@@ -109,7 +109,11 @@ screenshots:
     result: action is discoverable without explanatory copy
     issue: none
 
-visible_text_audit:
-- command: python3 product-ui-surface/scripts/audit_visible_text.py visible-text.txt --contract ui-surface/surface-language-contract.md
-- result: pass
+visible_text_review:
+- screen_region: skills table and toolbar
+  visible_text: Skills / 已启用 / 停用
+  contract_reference: object/action/state language
+  verdict: pass
+  reasoning: labels name the object, current state, and available action without explaining the product pitch
+  issue: none
 ```

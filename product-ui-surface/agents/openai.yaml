@@ -1,4 +1,4 @@
 interface:
   display_name: "Product UI Surface"
-  short_description: "Create/redesign UI; verify visuals and brief leaks"
-  default_prompt: "Use $product-ui-surface to create/redesign/refactor this product UI from surface contracts, verify rendered screenshots with designer and user passes, and audit visible text for brief leakage."
+  short_description: "Create/redesign UI with visual and language review"
+  default_prompt: "Use $product-ui-surface to create/redesign/refactor this product UI from surface contracts, verify rendered screenshots with designer and user passes, and review visible text for brief leakage."

@@ -43,33 +43,17 @@ Walk the task as a user:
 
 This is not an accessibility-only pass. Basic accessibility issues can be reported, but do not let WCAG-style findings replace product usability judgment.
 
-## Visible Text Audit
+## Visible Text Review
 
-Collect text from the rendered DOM, copy files, or screenshots converted to text when practical. Then scan for:
+Review text from the rendered DOM, copy files, or screenshots converted to text when practical. Judge it against `surface-language-contract.md`:
 
-- direct brief terms
-- explanatory phrases such as `用于`, `旨在`, `帮助用户`, `用户可以`
-- internal implementation terms
-- product strategy or pitch language
-- tutorial voice in labels, actions, and statuses
+- Does the text speak as the product surface, or as a designer/PM explaining the surface?
+- Does it name concrete objects, actions, states, limits, or recovery paths?
+- Does it smuggle in strategy, implementation, orchestration, or marketing language?
+- Does helper/error text clarify the current task without teaching the whole workflow?
+- Would this wording still make sense if the original prompt were hidden?
 
-Use the bundled script for a deterministic first pass:
-
-Prefer extracted rendered text over scanning the full source tree:
-
-```bash
-python3 product-ui-surface/scripts/audit_visible_text.py visible-text.txt --contract ui-surface/surface-language-contract.md
-```
-
-If the contract is not available, use a one-term-per-line file:
-
-```bash
-python3 product-ui-surface/scripts/audit_visible_text.py visible-text.txt --forbidden ui-surface/forbidden-terms.txt
-```
-
-For source-tree fallback scans, use `--exclude` for generated docs/build output, `--allow` or `--allow-file` for product terms that are intentionally visible, and `--no-defaults` when only project-specific terms should be checked.
-
-The script is a guardrail, not the final reviewer. False positives should be reviewed, not ignored blindly.
+This is an agent judgment pass. Do not claim the UI is good or bad because a phrase appears or does not appear. Explain the perspective problem, cite the screen region, and rewrite toward product-surface language when needed.
 
 ## Completion Standard
 
@@ -80,5 +64,5 @@ Do not mark a UI slice complete unless the closeout includes:
 - if screenshot capture is impossible, browser target, viewport, exact reason, and live-observation notes
 - designer pass notes
 - user pass notes
-- visible text audit result or reason it was not possible
+- visible text review notes tied to `surface-language-contract.md`
 - remaining risks
