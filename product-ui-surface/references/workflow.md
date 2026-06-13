@@ -7,7 +7,7 @@ Use this reference when creating, redesigning, or refactoring product UI across 
 `product-ui-surface` is the UI surface skill. `codex-conductor` is the orchestration workflow/runtime for large scopes, not a UI implementation role. If `codex-conductor` is not installed and the user wants whole-product UI work, tell them to install it from GitHub:
 
 ```bash
-npx skills add https://github.com/catoncat/codex-conductor -g -a codex -y
+npx skills add catoncat/codex-conductor -g -a codex -y
 ```
 
 ### Single-session surface work
