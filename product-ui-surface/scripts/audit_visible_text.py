@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 import re
 import sys
@@ -41,15 +42,41 @@ DEFAULT_PATTERNS = [
 ]
 
 
-def load_forbidden(paths: list[str], inline: list[str]) -> list[str]:
-    terms = list(DEFAULT_PATTERNS)
-    terms.extend(inline)
-    for raw_path in paths:
-        path = Path(raw_path)
-        for line in path.read_text(encoding="utf-8").splitlines():
-            term = line.strip()
-            if term and not term.startswith("#"):
+def read_terms_file(raw_path: str) -> list[str]:
+    path = Path(raw_path)
+    terms = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        term = line.strip()
+        if term and not term.startswith("#"):
+            terms.append(term)
+    return terms
+
+
+def parse_contract_terms(raw_path: str) -> list[str]:
+    """Extract bullet terms from a markdown `forbidden_brief_terms:` section."""
+    path = Path(raw_path)
+    terms = []
+    in_section = False
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped == "forbidden_brief_terms:":
+            in_section = True
+            continue
+        if not in_section:
+            continue
+        if not stripped:
+            continue
+        if stripped.startswith("- "):
+            term = stripped[2:].strip()
+            if term:
                 terms.append(term)
+            continue
+        if re.match(r"^[A-Za-z0-9_-]+:", stripped):
+            break
+    return terms
+
+
+def unique_terms(terms: list[str]) -> list[str]:
     seen = set()
     unique = []
     for term in terms:
@@ -60,14 +87,41 @@ def load_forbidden(paths: list[str], inline: list[str]) -> list[str]:
     return unique
 
 
-def iter_inputs(paths: list[str]) -> list[tuple[str, str]]:
+def load_forbidden(
+    paths: list[str],
+    inline: list[str],
+    contracts: list[str],
+    include_defaults: bool,
+    allowed_terms: list[str],
+) -> list[str]:
+    terms = list(DEFAULT_PATTERNS) if include_defaults else []
+    terms.extend(inline)
+    for raw_path in paths:
+        terms.extend(read_terms_file(raw_path))
+    for raw_path in contracts:
+        terms.extend(parse_contract_terms(raw_path))
+
+    allowed = {term.casefold() for term in allowed_terms}
+    return [term for term in unique_terms(terms) if term.casefold() not in allowed]
+
+
+def excluded(path: Path, patterns: list[str]) -> bool:
+    value = str(path)
+    return any(pattern in value or fnmatch.fnmatch(value, pattern) or fnmatch.fnmatch(path.name, pattern) for pattern in patterns)
+
+
+def iter_inputs(paths: list[str], exclude_patterns: list[str]) -> list[tuple[str, str]]:
     if not paths:
         return [("<stdin>", sys.stdin.read())]
     chunks = []
     for raw_path in paths:
         path = Path(raw_path)
+        if excluded(path, exclude_patterns):
+            continue
         if path.is_dir():
             for child in sorted(path.rglob("*")):
+                if excluded(child, exclude_patterns):
+                    continue
                 if child.is_file() and child.suffix.lower() in {
                     ".txt",
                     ".md",
@@ -125,17 +179,56 @@ def main() -> int:
         help="File with one additional forbidden term per line.",
     )
     parser.add_argument(
+        "--contract",
+        action="append",
+        default=[],
+        help="Surface language contract markdown file. Reads forbidden_brief_terms bullets.",
+    )
+    parser.add_argument(
         "--term",
         action="append",
         default=[],
         help="Additional forbidden term. Can be provided multiple times.",
     )
+    parser.add_argument(
+        "--allow",
+        action="append",
+        default=[],
+        help="Allowed term to suppress from findings. Can be provided multiple times.",
+    )
+    parser.add_argument(
+        "--allow-file",
+        action="append",
+        default=[],
+        help="File with one allowed term per line.",
+    )
+    parser.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Skip paths matching this glob or substring. Can be provided multiple times.",
+    )
+    parser.add_argument(
+        "--no-defaults",
+        action="store_true",
+        help="Disable built-in brief-leak patterns and use only --term, --forbidden, or --contract terms.",
+    )
     parser.add_argument("--json", action="store_true", help="Emit JSON.")
     args = parser.parse_args()
 
-    patterns = load_forbidden(args.forbidden, args.term)
+    allowed_terms = list(args.allow)
+    for raw_path in args.allow_file:
+        allowed_terms.extend(read_terms_file(raw_path))
+
+    patterns = load_forbidden(
+        args.forbidden,
+        args.term,
+        args.contract,
+        include_defaults=not args.no_defaults,
+        allowed_terms=allowed_terms,
+    )
     findings = []
-    for name, text in iter_inputs(args.paths):
+    for name, text in iter_inputs(args.paths, args.exclude):
         findings.extend(scan(name, text, patterns))
 
     if args.json:

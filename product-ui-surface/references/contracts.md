@@ -2,6 +2,16 @@
 
 Create these contracts before new multi-screen UI work, redesigns, or large UI edits. Keep them short enough for workers to read.
 
+## Artifact Path Convention
+
+For one screen, the surface contract may be inline. When artifacts are persisted, use `ui-surface/` for all of them:
+
+- `ui-surface/page-inventory.md`
+- `ui-surface/design-system-contract.md`
+- `ui-surface/surface-language-contract.md`
+- `ui-surface/forbidden-terms.txt`
+- `ui-surface/verification-report.md`
+
 ## Page Inventory
 
 ```markdown
@@ -82,6 +92,14 @@ forbidden_brief_terms:
 - 这个界面旨在
 - 管理能力
 
+brief_to_ui_translation:
+- brief_phrase: 帮助用户高效管理能力
+  forbidden_in_ui: true
+  use_instead:
+  - object: 能力
+  - action: 新建能力 / 编辑能力 / 停用能力
+  - state: 草稿 / 已发布 / 已停用
+
 copy_rules:
 - Titles name objects or places.
 - Buttons name actions.
@@ -95,6 +113,22 @@ tone:
 - concise, concrete, no tutorial voice
 ```
 
+## Forbidden Terms File
+
+Write `ui-surface/forbidden-terms.txt` with one forbidden visible-UI term per line, derived from `surface-language-contract.md`.
+
+```text
+帮助用户
+提升效率
+可控
+低干扰
+agentic workflow
+这个界面旨在
+管理能力
+```
+
+The audit script can also read `forbidden_brief_terms` directly with `--contract ui-surface/surface-language-contract.md`.
+
 ## Verification Report
 
 ```markdown
@@ -106,9 +140,21 @@ build_or_server:
 screenshots:
 - route:
   viewport:
-  evidence:
+  screenshot_path:
+  browser_target:
+  screen_region:
   designer_pass:
+  - region:
+    criterion:
+    evidence:
+    issue:
+    fix_or_acceptance:
   user_pass:
+  - task:
+    step:
+    visible_cue:
+    result:
+    issue:
   issues:
 
 interaction_checks:

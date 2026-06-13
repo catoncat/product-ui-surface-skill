@@ -20,21 +20,22 @@ Classify the request before editing.
 | New product UI, app screen, dashboard, or tool surface | Greenfield product UI |
 | Existing component, small page, or focused state | Single-session improvement |
 | Existing module or several related pages | Page-group redesign/refactor |
-| Whole product, many routes, many workers, durable state, waves, or handoffs | **REQUIRED SUB-SKILL:** Use `codex-conductor` |
+| Whole product, many routes, many workers, durable state, waves, or handoffs | Escalate to a `codex-conductor` workflow/runtime when available: controller owns contracts/state/waves; builders edit UI from filtered context; verifiers inspect rendered output |
 | Only labels/buttons/errors/toasts, no layout or interaction work | Use `ui-microcopy` instead, or only for the text subtask |
 
 Do not treat "from the user's perspective" as "do an accessibility checklist." Accessibility is a baseline guard when visible risk appears; this skill's main lens is product usability, visual design quality, and interaction reasonableness.
 
 ## Required Artifacts
 
-For any new multi-screen UI, page-group redesign, or whole-product UI effort, create or update these compact artifacts before broad edits:
+For any meaningful UI creation, redesign, or refactor, create a compact UI surface contract before editing. For one screen, the contract may be inline in the plan. For new multi-screen UI, page-group redesign, or whole-product work, persist these artifacts under `ui-surface/`:
 
 - `page-inventory.md`: routes, screens, dialogs, empty/error/loading states, critical flows.
 - `design-system-contract.md`: layout, density, spacing, typography, components, interaction patterns, responsive rules.
 - `surface-language-contract.md`: allowed UI terms, forbidden brief terms, visible text constraints.
+- `forbidden-terms.txt`: one forbidden visible-UI term per line, derived from `surface-language-contract.md`, for mechanical scans.
 - `verification-report.md`: screenshots reviewed, designer pass, user pass, regressions, remaining risks.
 
-For whole-product work, keep these under a workflow folder such as `ui-surface/` and let the conductor own `workflow-state.md`.
+For whole-product work, let the conductor own `ui-surface/workflow-state.md`.
 
 ## Workflow
 
@@ -70,4 +71,5 @@ Report these as evidence, not taste. Cite screenshot path or browser target, vie
 - `references/workflow.md`: full-product and multi-page workflow, including conductor role boundaries.
 - `references/contracts.md`: artifact templates and worker prompt shape.
 - `references/verification.md`: visual, interaction, screenshot, and text-leak verification checklist.
+- `references/examples.md`: short greenfield, conductor, worker, and verifier examples.
 - `scripts/audit_visible_text.py`: deterministic scan for brief leakage and explanatory UI phrases.

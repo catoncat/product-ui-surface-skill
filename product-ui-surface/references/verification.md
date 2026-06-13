@@ -55,9 +55,19 @@ Collect text from the rendered DOM, copy files, or screenshots converted to text
 
 Use the bundled script for a deterministic first pass:
 
+Prefer extracted rendered text over scanning the full source tree:
+
+```bash
+python3 product-ui-surface/scripts/audit_visible_text.py visible-text.txt --contract ui-surface/surface-language-contract.md
+```
+
+If the contract is not available, use a one-term-per-line file:
+
 ```bash
 python3 product-ui-surface/scripts/audit_visible_text.py visible-text.txt --forbidden ui-surface/forbidden-terms.txt
 ```
+
+For source-tree fallback scans, use `--exclude` for generated docs/build output, `--allow` or `--allow-file` for product terms that are intentionally visible, and `--no-defaults` when only project-specific terms should be checked.
 
 The script is a guardrail, not the final reviewer. False positives should be reviewed, not ignored blindly.
 
@@ -66,7 +76,8 @@ The script is a guardrail, not the final reviewer. False positives should be rev
 Do not mark a UI slice complete unless the closeout includes:
 
 - focused build/test result
-- screenshot or live browser evidence
+- screenshot evidence for each changed route/state/viewport, unless impossible
+- if screenshot capture is impossible, browser target, viewport, exact reason, and live-observation notes
 - designer pass notes
 - user pass notes
 - visible text audit result or reason it was not possible

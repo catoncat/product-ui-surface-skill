@@ -4,6 +4,8 @@ Use this reference when creating, redesigning, or refactoring product UI across 
 
 ## Workflow Modes
 
+`product-ui-surface` is the UI surface skill. `codex-conductor` is the orchestration workflow/runtime for large scopes, not a UI implementation role.
+
 ### Single-session surface work
 
 Use for one new screen, small existing page, or component. The same session may inventory, edit, and verify, but it still needs a compact contract and rendered verification.
@@ -74,8 +76,8 @@ Write scope:
 
 Read first:
 - AGENTS.md and project rules
-- ui-surface/design-system-contract.md
-- ui-surface/surface-language-contract.md
+- ui-surface/design-system-contract.md, or the inline design contract for one-screen work
+- ui-surface/surface-language-contract.md, or the inline surface-language contract for one-screen work
 - relevant component and route files
 
 Preserve:
@@ -94,6 +96,7 @@ Verification:
 - run focused tests/build checks
 - verify rendered page in Codex In-App Browser when target is local
 - record designer pass and user pass evidence
+- run visible text audit with project forbidden terms
 ```
 
 ## Controller Closeout
