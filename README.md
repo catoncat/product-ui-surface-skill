@@ -6,10 +6,10 @@ It is not a microcopy-only skill and not an accessibility-only checklist. It gui
 
 ## Install
 
-Copy the skill folder into a Codex skill directory:
+Install from GitHub with `npx skills`:
 
 ```bash
-cp -R product-ui-surface ~/.agents/skills/
+npx skills add https://github.com/catoncat/product-ui-surface-skill -g -a codex -y
 ```
 
 Then invoke it explicitly:
@@ -26,6 +26,16 @@ Use $product-ui-surface to create/redesign/refactor this product UI.
 - Review from both designer and user perspectives.
 - Do not let product brief or PRD language leak into visible UI.
 - Escalate whole-product work to a `codex-conductor` workflow/runtime when available.
+
+## Optional Companion: Codex Conductor
+
+For whole-product UI work with many routes, workers, waves, or durable state, install the companion conductor skill from its GitHub repository:
+
+```bash
+npx skills add https://github.com/catoncat/codex-conductor -g -a codex -y
+```
+
+`product-ui-surface` is the UI surface skill. `codex-conductor` is the orchestration skill that coordinates controller, builder, and verifier sessions for large scopes.
 
 ## Audit Script
 

@@ -4,7 +4,11 @@ Use this reference when creating, redesigning, or refactoring product UI across 
 
 ## Workflow Modes
 
-`product-ui-surface` is the UI surface skill. `codex-conductor` is the orchestration workflow/runtime for large scopes, not a UI implementation role.
+`product-ui-surface` is the UI surface skill. `codex-conductor` is the orchestration workflow/runtime for large scopes, not a UI implementation role. If `codex-conductor` is not installed and the user wants whole-product UI work, tell them to install it from GitHub:
+
+```bash
+npx skills add https://github.com/catoncat/codex-conductor -g -a codex -y
+```
 
 ### Single-session surface work
 
@@ -16,7 +20,7 @@ Use for several related screens. Create shared contracts, then build or improve 
 
 ### Whole-product surface work
 
-Use `codex-conductor`. The current controller owns state, contracts, prompts, wave slicing, evidence reconciliation, and final closeout. Execution sessions own product edits. Verifier sessions own rendered evidence.
+When `codex-conductor` is available, use it. The current controller owns state, contracts, prompts, wave slicing, evidence reconciliation, and final closeout. Execution sessions own product edits. Verifier sessions own rendered evidence.
 
 The controller should not edit product UI in conductor mode unless explicitly assigned a small implementation slice.
 
